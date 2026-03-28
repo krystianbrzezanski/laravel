@@ -17,37 +17,26 @@ class OrderResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'customer_name';
 
-    /**
-     * W Twojej wersji infolist() musi przyjmować i zwracać Schema.
-     */
     public static function infolist(Schema $schema): Schema
     {
         return $schema
             ->components([
                 \Filament\Schemas\Components\Section::make('Szczegóły zamówienia')
-                    ->columns(2)
-                    ->components([
-                        \Filament\Schemas\Components\TextEntry::make('customer_name')
-                            ->label('Klient'),
-                        \Filament\Schemas\Components\TextEntry::make('email')
-                            ->label('Email'),
-                        \Filament\Schemas\Components\TextEntry::make('status')
-                            ->badge(),
-                        \Filament\Schemas\Components\TextEntry::make('total_price')
-                            ->label('Suma całkowita'),
-                    ]),
+                    ->schema([ // Zmieniono z components() na schema()
+                        \Filament\Schemas\Components\TextEntry::make('customer_name')->label('Klient'),
+                        \Filament\Schemas\Components\TextEntry::make('email')->label('Email'),
+                        \Filament\Schemas\Components\TextEntry::make('status'),
+                        \Filament\Schemas\Components\TextEntry::make('total_price')->label('Suma'),
+                    ])->columns(2),
 
-                \Filament\Schemas\Components\Section::make('Kupione produkty')
-                    ->components([
+                \Filament\Schemas\Components\Section::make('Produkty')
+                    ->schema([ // Zmieniono z components() na schema()
                         \Filament\Schemas\Components\RepeatableEntry::make('items')
                             ->label('')
-                            ->components([
-                                \Filament\Schemas\Components\TextEntry::make('product.name')
-                                    ->label('Produkt'),
-                                \Filament\Schemas\Components\TextEntry::make('quantity')
-                                    ->label('Ilość'),
-                                \Filament\Schemas\Components\TextEntry::make('price')
-                                    ->label('Cena jedn.'),
+                            ->schema([ // Zmieniono z components() na schema()
+                                \Filament\Schemas\Components\TextEntry::make('product.name')->label('Produkt'),
+                                \Filament\Schemas\Components\TextEntry::make('quantity')->label('Ilość'),
+                                \Filament\Schemas\Components\TextEntry::make('price')->label('Cena'),
                             ]),
                     ]),
             ]);
@@ -68,7 +57,6 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('status'),
             ])
             ->actions([
-                // Pełna ścieżka zapobiega błędowi "Class not found" widocznemu w logach
                 \Filament\Tables\Actions\ViewAction::make(),
             ]);
     }
