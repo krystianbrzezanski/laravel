@@ -45,8 +45,17 @@
 <div class="hidden md:flex items-center gap-4 mr-4">
     <a href="/admin/login" class="text-sm font-medium text-gray-700 hover:text-indigo-600">Panel Admina</a>
     <span class="text-gray-300">|</span>
-    <a href="/login" class="text-sm font-medium text-gray-700 hover:text-indigo-600">Zaloguj</a>
-    <a href="/register" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700">Zarejestruj</a>
+    
+    @if (Route::has('login'))
+        @auth
+            <a href="{{ url('/dashboard') }}" class="text-sm font-medium text-gray-700 hover:text-indigo-600">Moje Konto</a>
+        @else
+            <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-indigo-600">Zaloguj</a>
+            @if (Route::has('register'))
+                <a href="{{ route('register') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700">Zarejestruj</a>
+            @endif
+        @endauth
+    @endif
 </div>
             <div class="flex items-center gap-4">
                 <a href="{{ route('cart.index') }}" class="bg-gray-100 hover:bg-gray-200 p-3 rounded-2xl transition-colors relative group">

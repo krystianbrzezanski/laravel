@@ -1,10 +1,15 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Category; // Dodane
+use App\Models\Product;  // Dodane
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcome', [
+        'categories' => Category::all(),
+        'products' => Product::all() // To naprawi błąd 500
+    ]);
 });
 
 Route::get('/dashboard', function () {
