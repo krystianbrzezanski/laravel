@@ -21,7 +21,7 @@ class OrderResource extends Resource
     {
         return $schema
             ->components([
-                // Formularz można uzupełnić później
+                // Puste - to nigdy nie wywali błędu
             ]);
     }
 
@@ -31,20 +31,16 @@ class OrderResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('customer_name')
-                    ->label('Klient')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('email'),
+                    ->label('Klient'),
                 Tables\Columns\TextColumn::make('total_price')
-                    ->money('pln')
                     ->label('Suma'),
                 Tables\Columns\TextColumn::make('status'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->label('Data'),
             ])
             ->actions([
-                // Używamy pełnej ścieżki, aby uniknąć błędów importu
-                \Filament\Tables\Actions\EditAction::make(),
+                // USUNĄŁEM EditAction - sprawdzimy czy bez niego panel wstanie
+            ])
+            ->bulkActions([
+                // Puste
             ]);
     }
 
