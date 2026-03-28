@@ -8,7 +8,6 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Tables\Actions\EditAction; // DODANO TEN IMPORT
 
 class OrderResource extends Resource
 {
@@ -22,7 +21,7 @@ class OrderResource extends Resource
     {
         return $schema
             ->components([
-                //
+                // Formularz można uzupełnić później
             ]);
     }
 
@@ -44,7 +43,8 @@ class OrderResource extends Resource
                     ->label('Data'),
             ])
             ->actions([
-                EditAction::make(), // Teraz zadziała dzięki importowi powyżej
+                // Używamy pełnej ścieżki, aby uniknąć błędów importu
+                \Filament\Tables\Actions\EditAction::make(),
             ]);
     }
 
