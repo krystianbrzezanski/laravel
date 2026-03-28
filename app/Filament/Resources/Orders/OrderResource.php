@@ -13,8 +13,8 @@ class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
-    // Używamy prostego stringa bez deklaracji typu BackedEnum
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
+    // TA LINIA ZOSTAŁA POPRAWIONA - dodano \BackedEnum, żeby typ się zgadzał
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-shopping-cart';
 
     protected static ?string $recordTitleAttribute = 'customer_name';
 
@@ -22,7 +22,7 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
-                // Na razie zostawiamy puste, aby upewnić się, że panel wstanie
+                //
             ]);
     }
 
