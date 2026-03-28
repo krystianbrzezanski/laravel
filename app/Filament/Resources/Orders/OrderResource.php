@@ -21,7 +21,33 @@ class OrderResource extends Resource
     {
         return $schema
             ->components([
-                // Puste - to nigdy nie wywali błędu
+                // Formularz zostawiamy pusty dla stabilności
+            ]);
+    }
+
+    // NOWA METODA: To pokaże produkty po kliknięciu w zamówienie
+    public static function infolist(\Filament\Infolists\Infolist $infolist): \Filament\Infolists\Infolist
+    {
+        return $infolist
+            ->schema([
+                \Filament\Infolists\Components\Section::make('Szczegóły klienta')
+                    ->schema([
+                        \Filament\Infolists\Components\TextEntry::make('customer_name')->label('Klient'),
+                        \Filament\Infolists\Components\TextEntry::make('email')->label('Email'),
+                        \Filament\Infolists\Components\TextEntry::make('status')->badge(),
+                        \Filament\Infolists\Components\TextEntry::make('total_price')->money('pln')->label('Suma całkowita'),
+                    ])->columns(2),
+
+                \Filament\Infolists\Components\Section::make('Kupione produkty')
+                    ->schema([
+                        \Filament\Infolists\Components\RepeatableEntry::make('items') // odnosi się do relacji w modelu Order
+                            ->label('')
+                            ->schema([
+                                \Filament\Infolists\Components\TextEntry::make('product.name')->label('Produkt'),
+                                \Filament\Infolists\Components\TextEntry::make('quantity')->label('Ilość'),
+                                \Filament\Infolists\Components\TextEntry::make('price')->money('pln')->label('Cena jedn.'),
+                            ])->columns(3)
+                    ])
             ]);
     }
 
@@ -37,7 +63,8 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('status'),
             ])
             ->actions([
-                // USUNĄŁEM EditAction - sprawdzimy czy bez niego panel wstanie
+                // Dodajemy bezpieczny przycisk podglądu (Oko)
+                \Filament\Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 // Puste
