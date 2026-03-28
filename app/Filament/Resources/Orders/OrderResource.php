@@ -5,9 +5,10 @@ namespace App\Filament\Resources\Orders;
 use App\Filament\Resources\Orders\Pages;
 use App\Models\Order;
 use Filament\Resources\Resource;
-use Filament\Schemas\Schema; // Nowy import zamiast Forms\Form
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Actions\EditAction; // DODANO TEN IMPORT
 
 class OrderResource extends Resource
 {
@@ -17,12 +18,11 @@ class OrderResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'customer_name';
 
-    // Zmieniono typy parametrów i zwracane na Schema
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                // Puste na razie dla stabilności buildu
+                //
             ]);
     }
 
@@ -38,20 +38,13 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('total_price')
                     ->money('pln')
                     ->label('Suma'),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'nowe' => 'gray',
-                        'opłacone' => 'success',
-                        'wysłane' => 'info',
-                        default => 'gray',
-                    }),
+                Tables\Columns\TextColumn::make('status'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->label('Data'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(), // Teraz zadziała dzięki importowi powyżej
             ]);
     }
 
