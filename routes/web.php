@@ -54,3 +54,15 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+use Illuminate\Support\Facades\Gate;
+
+// Definiujemy bramkę dostępu (Gate)
+Gate::define('access-admin', function ($user) {
+    return $user->email === 'admin@test.pl'; // Tu wpisz swój e-mail
+});
+
+// Jeśli masz trasy admina w web.php, owiń je tak:
+Route::middleware(['auth', 'can:access-admin'])->prefix('admin')->group(function () {
+    // Tutaj trafiają wszystkie trasy, które mają być tylko dla Ciebie
+});

@@ -52,7 +52,7 @@ class User extends Authenticatable implements FilamentUser // Zmienione: dodano 
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        // Pozwala na dostęp każdemu, kto jest zalogowany (na czas testów)
-        return true; 
+        // Tutaj wpisz swój prawdziwy adres e-mail admina
+        return $this->email === 'admin@test.pl'; 
     }
 }

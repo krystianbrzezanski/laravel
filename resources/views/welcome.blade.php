@@ -43,7 +43,12 @@
                 </div>
             </div>
 <div class="hidden md:flex items-center gap-4 mr-4">
-    <a href="/admin/login" class="text-sm font-medium text-gray-700 hover:text-indigo-600">Panel Admina</a>
+    @auth
+    @if(auth()->user()->email === 'twój-email@admin.pl') 
+        <a href="/admin" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 font-bold">🛡️ Panel Admina</a>
+        <span class="text-gray-300">|</span>
+    @endif
+@endauth
     <span class="text-gray-300">|</span>
     
     @if (Route::has('login'))
