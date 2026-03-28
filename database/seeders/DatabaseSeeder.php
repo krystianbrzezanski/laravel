@@ -15,34 +15,35 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Tworzy użytkownika (już bez błędu)
+        // Tworzy użytkownika (korzystając z poprawionej fabryki powyżej)
         \App\Models\User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Admin',
+            'email' => 'admin@test.pl',
         ]);
 
-        // DODAJEMY KATEGORIĘ I PRODUKTY
+        // DODAJEMY KATEGORIĘ
         $category = \App\Models\Category::create([
             'name' => 'Elektronika',
             'slug' => 'elektronika'
         ]);
 
+        // DODAJEMY PRODUKTY DO TEJ KATEGORII
         \App\Models\Product::create([
             'name' => 'Laptop Gamingowy',
             'slug' => 'laptop-gamingowy',
-            'description' => 'Super szybki laptop do gier.',
+            'description' => 'Super szybki laptop.',
             'price' => 4500.00,
             'category_id' => $category->id,
-            'stock' => 5
+            'stock' => 10
         ]);
 
         \App\Models\Product::create([
-            'name' => 'Mysz Bezprzewodowa',
-            'slug' => 'mysz-bezprzewodowa',
-            'description' => 'Precyzyjna mysz do pracy.',
-            'price' => 150.00,
+            'name' => 'Myszka',
+            'slug' => 'myszka-usb',
+            'description' => 'Myszka optyczna.',
+            'price' => 50.00,
             'category_id' => $category->id,
-            'stock' => 20
+            'stock' => 50
         ]);
     }
 }
