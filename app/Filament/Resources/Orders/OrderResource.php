@@ -17,9 +17,6 @@ class OrderResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'customer_name';
 
-    /**
-     * W Twojej wersji metoda infolist musi przyjmować i zwracać Schema.
-     */
     public static function infolist(Schema $schema): Schema
     {
         return $schema
@@ -47,7 +44,6 @@ class OrderResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        // Pusta metoda form, aby nie powodować konfliktów przy budowaniu
         return $schema->components([]);
     }
 
@@ -61,15 +57,12 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('status'),
             ])
             ->actions([
-                // Używamy pełnej ścieżki do ViewAction, jeśli jest dostępna w Twojej wersji
-                \Filament\Tables\Actions\ViewAction::make(),
-            ])
-            ->bulkActions([]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [];
+                // W tej wersji Filamentu akcje muszą być definiowane przez Schemas
+                \Filament\Schemas\Actions\Action::make('view')
+                    ->label('Zobacz')
+                    ->icon('heroicon-m-eye')
+                    ->infolist(fn (Schema $schema) => static::infolist($schema)),
+            ]);
     }
 
     public static function getPages(): array
