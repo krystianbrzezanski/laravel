@@ -17,23 +17,26 @@ class OrderResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'customer_name';
 
+    /**
+     * W Twojej wersji metoda infolist musi przyjmować i zwracać Schema.
+     */
     public static function infolist(Schema $schema): Schema
     {
         return $schema
             ->components([
                 \Filament\Schemas\Components\Section::make('Szczegóły zamówienia')
-                    ->schema([ // Zmieniono z components() na schema()
+                    ->schema([
                         \Filament\Schemas\Components\TextEntry::make('customer_name')->label('Klient'),
-                        \Filament\Schemas\Components\TextEntry::make('email')->label('Email'),
+                        \Filament\Schemas\Components\TextEntry::make('email'),
                         \Filament\Schemas\Components\TextEntry::make('status'),
                         \Filament\Schemas\Components\TextEntry::make('total_price')->label('Suma'),
                     ])->columns(2),
 
                 \Filament\Schemas\Components\Section::make('Produkty')
-                    ->schema([ // Zmieniono z components() na schema()
+                    ->schema([
                         \Filament\Schemas\Components\RepeatableEntry::make('items')
                             ->label('')
-                            ->schema([ // Zmieniono z components() na schema()
+                            ->schema([
                                 \Filament\Schemas\Components\TextEntry::make('product.name')->label('Produkt'),
                                 \Filament\Schemas\Components\TextEntry::make('quantity')->label('Ilość'),
                                 \Filament\Schemas\Components\TextEntry::make('price')->label('Cena'),
@@ -44,6 +47,7 @@ class OrderResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
+        // Pusta metoda form, aby nie powodować konfliktów przy budowaniu
         return $schema->components([]);
     }
 
@@ -57,8 +61,10 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('status'),
             ])
             ->actions([
+                // Używamy pełnej ścieżki do ViewAction, jeśli jest dostępna w Twojej wersji
                 \Filament\Tables\Actions\ViewAction::make(),
-            ]);
+            ])
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array
@@ -70,8 +76,6 @@ class OrderResource extends Resource
     {
         return [
             'index' => Pages\ListOrders::route('/'),
-            'create' => Pages\CreateOrder::route('/create'),
-            'edit' => Pages\EditOrder::route('/{record}/edit'),
         ];
     }
 }
