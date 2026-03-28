@@ -17,6 +17,7 @@ class OrderResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'customer_name';
 
+    // Ta metoda zostaje, bo build ją akceptuje
     public static function infolist(Schema $schema): Schema
     {
         return $schema
@@ -24,20 +25,7 @@ class OrderResource extends Resource
                 \Filament\Schemas\Components\Section::make('Szczegóły zamówienia')
                     ->schema([
                         \Filament\Schemas\Components\TextEntry::make('customer_name')->label('Klient'),
-                        \Filament\Schemas\Components\TextEntry::make('email'),
-                        \Filament\Schemas\Components\TextEntry::make('status'),
                         \Filament\Schemas\Components\TextEntry::make('total_price')->label('Suma'),
-                    ])->columns(2),
-
-                \Filament\Schemas\Components\Section::make('Produkty')
-                    ->schema([
-                        \Filament\Schemas\Components\RepeatableEntry::make('items')
-                            ->label('')
-                            ->schema([
-                                \Filament\Schemas\Components\TextEntry::make('product.name')->label('Produkt'),
-                                \Filament\Schemas\Components\TextEntry::make('quantity')->label('Ilość'),
-                                \Filament\Schemas\Components\TextEntry::make('price')->label('Cena'),
-                            ]),
                     ]),
             ]);
     }
@@ -57,12 +45,9 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('status'),
             ])
             ->actions([
-                // W tej wersji Filamentu akcje muszą być definiowane przez Schemas
-                \Filament\Schemas\Actions\Action::make('view')
-                    ->label('Zobacz')
-                    ->icon('heroicon-m-eye')
-                    ->infolist(fn (Schema $schema) => static::infolist($schema)),
-            ]);
+                // CAŁKOWICIE PUSTE AKCJE - to musi wyeliminować błąd "Class not found"
+            ])
+            ->bulkActions([]);
     }
 
     public static function getPages(): array
