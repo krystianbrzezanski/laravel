@@ -17,37 +17,38 @@ class OrderResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'customer_name';
 
+    // W Twojej wersji 'infolist' również używa klasy Schema zamiast Infolist
+    public static function infolist(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                \Filament\Schemas\Components\Section::make('Szczegóły zamówienia')
+                    ->columns(2)
+                    ->components([
+                        \Filament\Schemas\Components\TextEntry::make('customer_name')->label('Klient'),
+                        \Filament\Schemas\Components\TextEntry::make('email')->label('Email'),
+                        \Filament\Schemas\Components\TextEntry::make('status'),
+                        \Filament\Schemas\Components\TextEntry::make('total_price')->label('Suma'),
+                    ]),
+
+                \Filament\Schemas\Components\Section::make('Produkty')
+                    ->components([
+                        \Filament\Schemas\Components\RepeatableEntry::make('items')
+                            ->label('')
+                            ->components([
+                                \Filament\Schemas\Components\TextEntry::make('product.name')->label('Produkt'),
+                                \Filament\Schemas\Components\TextEntry::make('quantity')->label('Ilość'),
+                                \Filament\Schemas\Components\TextEntry::make('price')->label('Cena'),
+                            ]),
+                    ]),
+            ]);
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                // Formularz zostawiamy pusty dla stabilności
-            ]);
-    }
-
-    // NOWA METODA: To pokaże produkty po kliknięciu w zamówienie
-    public static function infolist(\Filament\Infolists\Infolist $infolist): \Filament\Infolists\Infolist
-    {
-        return $infolist
-            ->schema([
-                \Filament\Infolists\Components\Section::make('Szczegóły klienta')
-                    ->schema([
-                        \Filament\Infolists\Components\TextEntry::make('customer_name')->label('Klient'),
-                        \Filament\Infolists\Components\TextEntry::make('email')->label('Email'),
-                        \Filament\Infolists\Components\TextEntry::make('status')->badge(),
-                        \Filament\Infolists\Components\TextEntry::make('total_price')->money('pln')->label('Suma całkowita'),
-                    ])->columns(2),
-
-                \Filament\Infolists\Components\Section::make('Kupione produkty')
-                    ->schema([
-                        \Filament\Infolists\Components\RepeatableEntry::make('items') // odnosi się do relacji w modelu Order
-                            ->label('')
-                            ->schema([
-                                \Filament\Infolists\Components\TextEntry::make('product.name')->label('Produkt'),
-                                \Filament\Infolists\Components\TextEntry::make('quantity')->label('Ilość'),
-                                \Filament\Infolists\Components\TextEntry::make('price')->money('pln')->label('Cena jedn.'),
-                            ])->columns(3)
-                    ])
+                // Pozostawiamy puste dla stabilności buildu
             ]);
     }
 
@@ -56,19 +57,15 @@ class OrderResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('customer_name')
-                    ->label('Klient'),
-                Tables\Columns\TextColumn::make('total_price')
-                    ->label('Suma'),
+                Tables\Columns\TextColumn::make('customer_name')->label('Klient'),
+                Tables\Columns\TextColumn::make('total_price')->label('Suma'),
                 Tables\Columns\TextColumn::make('status'),
             ])
             ->actions([
-                // Dodajemy bezpieczny przycisk podglądu (Oko)
+                // Używamy Tables\Actions, które na pewno istnieją
                 \Filament\Tables\Actions\ViewAction::make(),
             ])
-            ->bulkActions([
-                // Puste
-            ]);
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array
