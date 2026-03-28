@@ -28,10 +28,6 @@ class CheckoutController extends Controller
     {
         $cart = session()->get('cart', []);
 
-        if (empty($cart)) {
-            return redirect()->route('cart.index')->with('error', 'Twój koszyk jest pusty. Nie można złożyć zamówienia.');
-        }
-
         // Walidacja danych klienta
         $request->validate([
             'customer_name' => 'required|string|max:255',

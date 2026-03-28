@@ -37,25 +37,24 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $cart = session()->get('cart', []);
+        $cart = session()->get('cart');
 
-        // Upewnij się, że koszyk ma wpis dla podanego produktu
-        if(!$cart || !isset($cart[$id])) {
-            return redirect()->back()->with('error', 'Produkt nie został znaleziony w koszyku.');
-        }
+        if(isset($cart[$id])) {
+            $newQuantity = (int) $request->quantity;
+            
+            // Jeśli ilość wynosi 0 lub mniej, usuwamy produkt z koszyka
+            if($newQuantity <= 0) {
+                unset($cart[$id]);
+                session()->put('cart', $cart);
+                return redirect()->back()->with('success', 'Produkt został usunięty z koszyka!');
+            }
 
-        $newQuantity = (int) $request->quantity;
-
-        // Jeśli ilość wynosi 0 lub mniej, usuwamy produkt z koszyka
-        if($newQuantity <= 0) {
-            unset($cart[$id]);
+            // W przeciwnym razie aktualizujemy ilość
+            $cart[$id]['quantity'] = $newQuantity;
             session()->put('cart', $cart);
-            return redirect()->back()->with('success', 'Produkt został usunięty z koszyka!');
+            return redirect()->back()->with('success', 'Ilość została zmieniona!');
         }
 
-        // W przeciwnym razie aktualizujemy ilość
-        $cart[$id]['quantity'] = $newQuantity;
-        session()->put('cart', $cart);
-        return redirect()->back()->with('success', 'Ilość została zmieniona!');
+        return redirect()->back()->with('error', 'Wystąpił błąd przy aktualizacji.');
     }
 }
