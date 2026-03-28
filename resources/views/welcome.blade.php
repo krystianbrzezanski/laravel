@@ -40,11 +40,6 @@
                             {{ $category->name }}
                         </a>
                     @endforeach
-                    @if($products->count() == 0)
-    <div class="col-span-full text-center py-20 bg-white rounded-3xl border-2 border-dashed border-gray-200">
-        <p class="text-gray-400 font-medium">Baza produktów jest obecnie pusta. Dodaj produkty przez panel lub komendę tinker!</p>
-    </div>
-@endif
                 </div>
             </div>
 
