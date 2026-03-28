@@ -2,10 +2,9 @@
 
 namespace App\Filament\Resources\Orders;
 
-use App\Filament\Resources\Orders\Pages\CreateOrder;
-use App\Filament\Resources\Orders\Pages\EditOrder;
-use App\Filament\Resources\Orders\Pages\ListOrders;
+use App\Filament\Resources\Orders\Pages;
 use App\Models\Order;
+use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -15,7 +14,7 @@ class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
-    // Uproszczony zapis ikony - to wyeliminuje błąd z BackedEnum
+    // Zmieniamy na prosty string, żeby uniknąć błędu BackedEnum
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
     protected static ?string $recordTitleAttribute = 'customer_name';
@@ -24,7 +23,15 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('customer_name')->disabled(),
+                Forms\Components\TextInput::make('email')->disabled(),
+                Forms\Components\TextInput::make('total_price')->disabled(),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'nowe' => 'Nowe',
+                        'opłacone' => 'Opłacone',
+                        'wysłane' => 'Wysłane',
+                    ])->required(),
             ]);
     }
 
@@ -33,52 +40,34 @@ class OrderResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('customer_name')
-                    ->searchable()
-                    ->label('Klient'),
-                Tables\Columns\TextColumn::make('email'),
-                Tables\Columns\TextColumn::make('total_price')
-                    ->money('pln')
-                    ->label('Suma'),
+                Tables\Columns\TextColumn::make('customer_name')->label('Klient')->searchable(),
+                Tables\Columns\TextColumn::make('total_price')->money('pln')->label('Suma'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'nowe' => 'info',
+                        'nowe' => 'gray',
                         'opłacone' => 'success',
-                        'wysłane' => 'warning',
+                        'wysłane' => 'info',
                         default => 'gray',
                     }),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->label('Data')
-                    ->sortable(),
-            ])
-            ->filters([
-                //
+                Tables\Columns\TextColumn::make('created_at')->label('Data')->dateTime(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListOrders::route('/'),
-            'create' => CreateOrder::route('/create'),
-            'edit' => EditOrder::route('/{record}/edit'),
+            'index' => Pages\ListOrders::route('/'),
+            'create' => Pages\CreateOrder::route('/create'),
+            'edit' => Pages\EditOrder::route('/{record}/edit'),
         ];
     }
 }
