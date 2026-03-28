@@ -1,36 +1,20 @@
 <?php
-use App\Http\Controllers\ProductController;
 
-use App\Http\Controllers\CartController;
-
-use App\Http\Controllers\CheckoutController;
-
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', function () {
+    return view('welcome');
+});
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Strona główna - Katalog produktów
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-Route::get('/', [ProductController::class, 'index'])->name('home');
-
-
-
-// KOSZYK
-
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-
-Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
-
-
-
-// AKTUALIZACJA ILOŚCI W KOSZYKU (Nowe!)
-
-Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-
-
-
-// CHECKOUT (Finalizacja zamówienia)
-
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-
-Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+require __DIR__.'/auth.php';
