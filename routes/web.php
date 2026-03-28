@@ -34,3 +34,12 @@ Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 
 Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/napraw-sklep', function() {
+    Artisan::call('view:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    return "Wszystkie pamięci wyczyszczone! Odśwież teraz stronę główną.";
+});
