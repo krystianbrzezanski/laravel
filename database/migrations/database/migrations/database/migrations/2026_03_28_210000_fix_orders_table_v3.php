@@ -8,6 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // To usunie starą wersję tabeli, która nie ma kolumny user_id
+        Schema::dropIfExists('orders');
+
+        // To stworzy ją poprawnie od zera
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
