@@ -1,22 +1,24 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CartController;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-// STRONA GŁÓWNA (z nazwą 'home')
+// --- STRONA GŁÓWNA (z poprawionym sortowaniem) ---
 Route::get('/', function (Request $request) {
     $query = Product::query();
 
+    // Filtrowanie po kategorii
     if ($request->has('category')) {
         $query->whereHas('category', function($q) use ($request) {
             $q->where('slug', $request->category);
         });
     }
 
-    // Sortowanie - sprawdź w bazie czy masz 'price' czy 'price_brutto'
+    // Sortowanie (używamy kolumny 'price', bo 'price_brutto' nie istnieje w bazie)
     switch ($request->sort) {
         case 'price_asc': $query->orderBy('price', 'asc'); break;
         case 'price_desc': $query->orderBy('price', 'desc'); break;
@@ -30,46 +32,17 @@ Route::get('/', function (Request $request) {
     ]);
 })->name('home');
 
-// KOSZYK - WYŚWIETLANIE
-Route::get('/cart', function () {
-    return view('cart.index');
-})->name('cart.index');
+// --- KOSZYK (Korzystamy z Twojego CartController) ---
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 
-// KOSZYK - DODAWANIE
-Route::post('/cart/add/{id}', function ($id) {
-    $product = Product::findOrFail($id);
-    $cart = session()->get('cart', []);
-    if(isset($cart[$id])) { $cart[$id]['quantity']++; } 
-    else {
-        $cart[$id] = [
-            "name" => $product->name,
-            "quantity" => 1,
-            "price" => $product->price, // upewnij się co do nazwy kolumny
-            "image" => $product->image
-        ];
-    }
-    session()->put('cart', $cart);
-    return redirect()->back()->with('success', 'Produkt dodany!');
-})->name('cart.add');
-
-// KOSZYK - AKTUALIZACJA I USUWANIE (To naprawi błąd w Twoim pliku)
-Route::patch('/cart/update/{id}', function (Request $request, $id) {
-    $cart = session()->get('cart');
-    if($request->quantity <= 0) {
-        unset($cart[$id]);
-    } else {
-        $cart[$id]['quantity'] = $request->quantity;
-    }
-    session()->put('cart', $cart);
-    return redirect()->back()->with('success', 'Koszyk zaktualizowany!');
-})->name('cart.update');
-
-// KASA (Tymczasowa trasa, żeby nie było błędu 500)
-Route::get('/checkout', function () {
+// --- KASA (Tymczasowa trasa, by nie było błędu 500) ---
+Route::get('/checkout', function() {
     return "Tu będzie finalizacja zamówienia";
 })->name('checkout.index');
 
-// BREEZE & AUTH
+// --- PANEL UŻYTKOWNIKA (Breeze) ---
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
