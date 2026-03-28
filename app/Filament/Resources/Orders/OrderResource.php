@@ -4,8 +4,8 @@ namespace App\Filament\Resources\Orders;
 
 use App\Filament\Resources\Orders\Pages;
 use App\Models\Order;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Schemas\Schema; // Nowy import zamiast Forms\Form
 use Filament\Tables;
 use Filament\Tables\Table;
 
@@ -13,16 +13,16 @@ class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
-    // TA LINIA ZOSTAŁA POPRAWIONA - dodano \BackedEnum, żeby typ się zgadzał
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-shopping-cart';
 
     protected static ?string $recordTitleAttribute = 'customer_name';
 
-    public static function form(Form $form): Form
+    // Zmieniono typy parametrów i zwracane na Schema
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                //
+        return $schema
+            ->components([
+                // Puste na razie dla stabilności buildu
             ]);
     }
 
