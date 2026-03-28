@@ -6,21 +6,20 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-// 1. NAPRAWA STRONY GŁÓWNEJ (Dostarcza $categories i $products)
+// STRONA GŁÓWNA (z nazwą 'home')
 Route::get('/', function (Request $request) {
     $query = Product::query();
 
-    // Filtrowanie po kategorii
     if ($request->has('category')) {
         $query->whereHas('category', function($q) use ($request) {
             $q->where('slug', $request->category);
         });
     }
 
-    // Sortowanie
+    // Sortowanie - sprawdź w bazie czy masz 'price' czy 'price_brutto'
     switch ($request->sort) {
-        case 'price_asc': $query->orderBy('price_brutto', 'asc'); break;
-        case 'price_desc': $query->orderBy('price_brutto', 'desc'); break;
+        case 'price_asc': $query->orderBy('price', 'asc'); break;
+        case 'price_desc': $query->orderBy('price', 'desc'); break;
         case 'name_asc': $query->orderBy('name', 'asc'); break;
         default: $query->latest(); break;
     }
@@ -29,40 +28,48 @@ Route::get('/', function (Request $request) {
         'categories' => Category::all(),
         'products' => $query->get()
     ]);
-});
+})->name('home');
 
-// 2. NAPRAWA BŁĘDU cart.index (Tworzy brakującą trasę koszyka)
-Route::get('/koszyk', function () {
-    // Jeśli nie masz jeszcze widoku cart/index, możesz tymczasowo zwrócić tekst:
-    // return "Tu będzie Twój koszyk";
-    return view('cart.index'); 
+// KOSZYK - WYŚWIETLANIE
+Route::get('/cart', function () {
+    return view('cart.index');
 })->name('cart.index');
 
-// 3. TRASA DODAWANIA DO KOSZYKA
+// KOSZYK - DODAWANIE
 Route::post('/cart/add/{id}', function ($id) {
-    $product = \App\Models\Product::findOrFail($id);
+    $product = Product::findOrFail($id);
     $cart = session()->get('cart', []);
-
-    if(isset($cart[$id])) {
-        $cart[$id]['quantity']++;
-    } else {
+    if(isset($cart[$id])) { $cart[$id]['quantity']++; } 
+    else {
         $cart[$id] = [
             "name" => $product->name,
             "quantity" => 1,
-            "price" => $product->price_brutto,
+            "price" => $product->price, // upewnij się co do nazwy kolumny
             "image" => $product->image
         ];
     }
-
     session()->put('cart', $cart);
-    return redirect()->back()->with('success', 'Produkt dodany do koszyka!');
+    return redirect()->back()->with('success', 'Produkt dodany!');
 })->name('cart.add');
 
-Route::get('/cart', function () {
-    return view('cart.index'); // Tu wyświetlimy zawartość sesji 'cart'
-})->name('cart.index');
+// KOSZYK - AKTUALIZACJA I USUWANIE (To naprawi błąd w Twoim pliku)
+Route::patch('/cart/update/{id}', function (Request $request, $id) {
+    $cart = session()->get('cart');
+    if($request->quantity <= 0) {
+        unset($cart[$id]);
+    } else {
+        $cart[$id]['quantity'] = $request->quantity;
+    }
+    session()->put('cart', $cart);
+    return redirect()->back()->with('success', 'Koszyk zaktualizowany!');
+})->name('cart.update');
 
-// 4. TRASY BREEZE (Dashboard i Profile)
+// KASA (Tymczasowa trasa, żeby nie było błędu 500)
+Route::get('/checkout', function () {
+    return "Tu będzie finalizacja zamówienia";
+})->name('checkout.index');
+
+// BREEZE & AUTH
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -73,5 +80,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// 5. ŁADOWANIE SYSTEMU LOGOWANIA
 require __DIR__.'/auth.php';
