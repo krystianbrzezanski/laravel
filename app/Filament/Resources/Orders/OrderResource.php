@@ -15,7 +15,8 @@ class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // Uproszczony zapis ikony - to wyeliminuje błąd z BackedEnum
+    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
 
     protected static ?string $recordTitleAttribute = 'customer_name';
 
@@ -23,7 +24,7 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
-                // Tutaj możesz dodać pola formularza edycji, jeśli chcesz
+                //
             ]);
     }
 
