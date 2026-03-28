@@ -53,9 +53,12 @@ Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.a
 Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 
 // --- 3. KASA (Tymczasowe, zapobiega błędom 404/500) ---
-Route::get('/checkout', function() {
-    return "Strona finalizacji zamówienia w przygotowaniu.";
-})->name('checkout.index');
+use App\Http\Controllers\CheckoutController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+});
 
 // --- 4. DASHBOARD (Przekierowanie na home, aby uniknąć błędu 403 po logowaniu) ---
 Route::get('/dashboard', function () {

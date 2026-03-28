@@ -3,26 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
-    // Te pola pozwalają na zapisywanie danych z formularza do bazy
-    protected $fillable = [
-        'customer_name', 
-        'email', 
-        'address', 
-        'city', 
-        'zip_code', 
-        'total_brutto', 
-        'status'
-    ];
+    protected $fillable = ['user_id', 'customer_name', 'email', 'address', 'city', 'total_price', 'status'];
 
-    /**
-     * Relacja: Jedno zamówienie ma wiele produktów (OrderItem)
-     */
-    public function items(): HasMany
-    {
+    public function items() {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }

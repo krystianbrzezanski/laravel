@@ -7,21 +7,17 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up(): void
-    {
-        Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
-            
-            // Relacja do zamówienia (KLUCZ OBCY)
-            $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            
-            // Dane produktu (zapisujemy je na sztywno)
-            $table->string('product_name'); 
-            $table->integer('quantity');
-            $table->decimal('price', 10, 2); // Cena jednostkowa w momencie zakupu
-            
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('order_items', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('order_id')->constrained()->onDelete('cascade');
+        $table->foreignId('product_id')->constrained();
+        $table->string('product_name');
+        $table->integer('quantity');
+        $table->decimal('price', 10, 2);
+        $table->timestamps();
+    });
+}
 
     public function down(): void
     {

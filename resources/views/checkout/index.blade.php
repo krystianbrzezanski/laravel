@@ -2,72 +2,50 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finalizacja zamówienia</title>
+    <title>Finalizacja Zamówienia</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 p-6 md:p-12">
-    <div class="max-w-3xl mx-auto">
-        <header class="mb-12">
-            <a href="{{ route('cart.index') }}" class="text-indigo-600 font-bold hover:underline">← Wróć do koszyka</a>
-            <h1 class="text-4xl font-black text-gray-900 mt-4">Dane do wysyłki</h1>
-        </header>
+<body class="bg-gray-50">
+    <div class="max-w-4xl mx-auto p-12">
+        <h1 class="text-4xl font-black mb-8 text-gray-900">Podsumowanie <span class="text-indigo-600">i dostawa</span></h1>
 
-        {{-- Formularz wysyła dane do metody store w CheckoutController --}}
-        <form action="{{ route('checkout.store') }}" method="POST" class="space-y-6">
-            @csrf
-            <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-6">
-                
-                {{-- Imię i Nazwisko --}}
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Imię i Nazwisko</label>
-                    <input type="text" name="customer_name" required autocomplete="name"
-                        class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                </div>
-
-                {{-- E-mail --}}
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">E-mail</label>
-                    <input type="email" name="email" required autocomplete="email"
-                        class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                </div>
-
-                {{-- Adres --}}
-                <div>
-                    <label class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Adres (ulica i numer)</label>
-                    <input type="text" name="address" required autocomplete="street-address"
-                        class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                </div>
-
-                {{-- Miasto i Kod Pocztowy --}}
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Miasto</label>
-                        <input type="text" name="city" required autocomplete="address-level2"
-                            class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                <form action="{{ route('checkout.store') }}" method="POST">
+                    @csrf
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Imię i Nazwisko</label>
+                            <input type="text" name="customer_name" value="{{ auth()->user()->name }}" required class="w-full bg-gray-50 border-none rounded-xl p-3 focus:ring-2 focus:ring-indigo-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Ulica i numer</label>
+                            <input type="text" name="address" required class="w-full bg-gray-50 border-none rounded-xl p-3 focus:ring-2 focus:ring-indigo-600">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Kod pocztowy i Miasto</label>
+                            <input type="text" name="city" required class="w-full bg-gray-50 border-none rounded-xl p-3 focus:ring-2 focus:ring-indigo-600">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">Kod pocztowy</label>
-                        {{-- Zmienione na tekst z patternem, żeby wymusić format 00-000 --}}
-                        <input type="text" name="zip_code" required 
-                            pattern="[0-9]{2}-[0-9]{3}" 
-                            title="Kod pocztowy musi być w formacie 00-000"
-                            placeholder="00-000"
-                            class="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                    </div>
-                </div>
+                    <button type="submit" class="w-full mt-8 bg-indigo-600 text-white font-bold py-4 rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100">
+                        Złóż zamówienie i zapłać
+                    </button>
+                </form>
             </div>
 
-            {{-- Podsumowanie płatności --}}
-            <div class="p-4 text-center">
-                <p class="text-gray-500 text-sm">Klikając przycisk poniżej, składasz zamówienie z obowiązkiem zapłaty.</p>
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold text-gray-800">Twoje Produkty</h3>
+                @foreach($cart as $item)
+                <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-gray-100">
+                    <div>
+                        <p class="font-bold text-gray-900">{{ $item['name'] }}</p>
+                        <p class="text-xs text-gray-400">{{ $item['quantity'] }} szt. x {{ number_format($item['price'], 2) }} PLN</p>
+                    </div>
+                    <p class="font-black text-indigo-600">{{ number_format($item['price'] * $item['quantity'], 2) }} PLN</p>
+                </div>
+                @endforeach
             </div>
-
-            <button type="submit" 
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-6 rounded-3xl font-bold text-lg shadow-xl shadow-indigo-200 transition-all active:scale-[0.98]">
-                Zamawiam i płacę
-            </button>
-        </form>
+        </div>
     </div>
 </body>
 </html>
