@@ -5,15 +5,28 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
+// 1. NAPRAWA STRONY GŁÓWNEJ (Dostarcza $categories i $products)
 Route::get('/', function () {
-    // Pobieramy dane z bazy, żeby widok welcome nie wywalał błędu
-    $categories = Category::all();
-    $products = Product::all();
-
-    return view('welcome', compact('categories', 'products'));
+    return view('welcome', [
+        'categories' => Category::all(),
+        'products' => Product::all()
+    ]);
 });
 
-// Reszta Twojego kodu (dashboard, profile, auth.php) zostaje bez zmian
+// 2. NAPRAWA BŁĘDU cart.index (Tworzy brakującą trasę koszyka)
+Route::get('/koszyk', function () {
+    // Jeśli nie masz jeszcze widoku cart/index, możesz tymczasowo zwrócić tekst:
+    // return "Tu będzie Twój koszyk";
+    return view('cart.index'); 
+})->name('cart.index');
+
+// 3. TRASA DODAWANIA DO KOSZYKA
+Route::post('/cart/add/{id}', function ($id) {
+    // Logika koszyka (na razie prosty powrót)
+    return back()->with('success', 'Produkt dodany do koszyka!');
+})->name('cart.add');
+
+// 4. TRASY BREEZE (Dashboard i Profile)
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -24,4 +37,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// 5. ŁADOWANIE SYSTEMU LOGOWANIA
 require __DIR__.'/auth.php';
