@@ -1,17 +1,19 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Models\Category; // Dodane
-use App\Models\Product;  // Dodane
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome', [
-        'categories' => Category::all(),
-        'products' => Product::all() // To naprawi błąd 500
-    ]);
+    // Pobieramy dane z bazy, żeby widok welcome nie wywalał błędu
+    $categories = Category::all();
+    $products = Product::all();
+
+    return view('welcome', compact('categories', 'products'));
 });
 
+// Reszta Twojego kodu (dashboard, profile, auth.php) zostaje bez zmian
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
