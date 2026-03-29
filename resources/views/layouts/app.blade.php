@@ -14,9 +14,11 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased bg-dark-bg text-white">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+    <body class="font-sans antialiased bg-black text-white">
+    <div class="min-h-screen bg-black">
+        @include('layouts.navigation')
+        ```
+
 
             <!-- Page Heading -->
             @isset($header)
