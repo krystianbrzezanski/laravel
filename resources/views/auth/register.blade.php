@@ -36,4 +36,9 @@
                 {{ __('Masz już konto?') }}
             </a>
 
-            <x-primary-button class="ms-4 bg-violet-600 hover
+            <x-primary-button class="ms-4 bg-violet-600 hover:bg-violet-700 active:bg-violet-800 focus:ring-violet-500 py-3 px-6 rounded-xl font-black uppercase tracking-tighter transition-all">
+                {{ __('Zarejestruj się') }}
+            </x-primary-button>
+        </div>
+    </form>
+</x-guest-layout>
