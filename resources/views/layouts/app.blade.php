@@ -13,13 +13,37 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <style>
-            body, .min-h-screen { background-color: #000000 !important; color: #ffffff !important; }
-            nav { background-color: #000000 !important; border-bottom: 1px solid #6d28d9 !important; }
-            header { background-color: #111827 !important; border-bottom: 1px solid rgba(109, 40, 217, 0.3) !important; }
-            .bg-white { background-color: #1a1a1a !important; color: #ffffff !important; }
-            .text-gray-800 { color: #ffffff !important; }
-            .shadow { shadow: 0 4px 6px -1px rgba(109, 40, 217, 0.2) !important; }
-        </style>
+    /* 1. Całe tło na czarno */
+    body, html, .min-h-screen { 
+        background-color: #000000 !important; 
+        color: #ffffff !important; 
+    }
+
+    /* 2. Nawigacja (pasek na górze) */
+    nav { 
+        background-color: #050505 !important; 
+        border-bottom: 2px solid #8b5cf6 !important; 
+    }
+
+    /* 3. Logo - wymuszamy widoczność */
+    .flex.shrink-0.items-center a, .font-black { 
+        color: #8b5cf6 !important; 
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    /* 4. Naprawa białych kart (np. w Dashboardzie) */
+    .bg-white { 
+        background-color: #111111 !important; 
+        color: #ffffff !important; 
+        border: 1px solid #2d2d2d !important;
+    }
+
+    /* 5. Teksty na biało */
+    .text-gray-800, .text-gray-600, .text-gray-400 { 
+        color: #f3f4f6 !important; 
+    }
+</style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen">
