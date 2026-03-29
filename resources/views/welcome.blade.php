@@ -6,7 +6,7 @@
     <title>JERZOSHOP</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-black text-white"> {{-- ZMIANA: Tło strony na czarne --}}
+<body class="bg-black text-white">
 
     {{-- SEKCJA POWIADOMIEŃ --}}
     @if(session('success'))
@@ -27,10 +27,9 @@
         </div>
     @endif
 
-    <nav class="bg-zinc-950 border-b border-violet-900/50 sticky top-0 z-50"> {{-- ZMIANA: Ciemna nawi --}}
+    <nav class="bg-zinc-950 border-b border-violet-900/50 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-12">
-                {{-- ZMIANA: Logo na fioletowo-białe --}}
                 <a href="/" class="text-2xl font-black tracking-tighter">
                     <span class="text-violet-500">🦔 JEŻO</span><span class="text-white">SHOP</span><span class="text-violet-500">.</span>
                 </a>
@@ -89,7 +88,7 @@
         
         <header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-                <h1 class="text-4xl font-black text-white"> {{-- ZMIANA: Tytuł na biało --}}
+                <h1 class="text-4xl font-black text-white">
                     @if(request('category'))
                         Kategoria: <span class="text-violet-500">{{ $categories->firstWhere('slug', request('category'))->name ?? 'Produkty' }}</span>
                     @else
@@ -115,19 +114,19 @@
                 <div class="bg-zinc-900 rounded-3xl shadow-sm border border-violet-900/10 overflow-hidden hover:border-violet-500/50 transition-all duration-300 group">
                     
                     <div class="aspect-square bg-zinc-800 overflow-hidden relative">
-    @if($product->image)
-        {{-- ZMIANA: asset() kieruje bezpośrednio do folderu public, gdzie są Twoje zdjęcia --}}
-        <img src="{{ asset('storage/' . $product->image) }}" 
-             alt="{{ $product->name }}" 
-             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100">
-    @else
-        <div class="w-full h-full flex items-center justify-center text-zinc-700">
-            <svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-        </div>
-    @endif
-</div>
+                        @if($product->image)
+                            {{-- NAPRAWIONE: Pobieranie adresu URL bezpośrednio z Bucketa S3 --}}
+                            <img src="{{ Storage::disk('s3')->url($product->image) }}" 
+                                 alt="{{ $product->name }}" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-zinc-700">
+                                <svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                        @endif
+                    </div>
 
                     <div class="p-8">
                         <div class="mb-2">
