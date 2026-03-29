@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Products\Schemas;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select; // Dodany import
+use Filament\Forms\Components\Select;
 use Illuminate\Support\Str;
 
 class ProductForm
@@ -27,10 +27,9 @@ class ProductForm
                     ->required()
                     ->unique(ignoreRecord: true),
 
-                // Nowe pole wyboru kategorii
                 Select::make('category_id')
                     ->label('Kategoria')
-                    ->relationship('category', 'name') // Łączy z tabelą categories
+                    ->relationship('category', 'name')
                     ->preload()
                     ->searchable()
                     ->required(),
@@ -48,7 +47,9 @@ class ProductForm
                 FileUpload::make('image')
                     ->label('Zdjęcie produktu')
                     ->image() 
-                    ->directory('products'),
+                    ->directory('images') // Zmienione z 'products' na 'images', aby trafiało do Twojego folderu public/images
+                    ->visibility('public')
+                    ->preserveFilenames(), // Zachowuje oryginalną nazwę pliku, np. lalka.jpg
             ])
             ->statePath('data');
     }

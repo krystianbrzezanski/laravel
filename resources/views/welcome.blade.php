@@ -115,18 +115,19 @@
                 <div class="bg-zinc-900 rounded-3xl shadow-sm border border-violet-900/10 overflow-hidden hover:border-violet-500/50 transition-all duration-300 group">
                     
                     <div class="aspect-square bg-zinc-800 overflow-hidden relative">
-                        @if($product->image)
-                            <img src="{{ asset('storage/' . $product->image) }}" 
-                                 alt="{{ $product->name }}" 
-                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100">
-                        @else
-                            <div class="w-full h-full flex items-center justify-center text-zinc-700">
-                                <svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                        @endif
-                    </div>
+    @if($product->image)
+        {{-- ZMIANA: asset() kieruje bezpośrednio do folderu public, gdzie są Twoje zdjęcia --}}
+        <img src="{{ asset('storage/' . $product->image) }}" 
+             alt="{{ $product->name }}" 
+             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80 group-hover:opacity-100">
+    @else
+        <div class="w-full h-full flex items-center justify-center text-zinc-700">
+            <svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+        </div>
+    @endif
+</div>
 
                     <div class="p-8">
                         <div class="mb-2">
