@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mój Sklep</title>
+    <title>JERZOSHOP</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
@@ -30,13 +30,13 @@
     <nav class="bg-white border-b border-gray-100 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-12">
-                <a href="/" class="text-2xl font-black text-gray-900 tracking-tighter">SKLEP<span class="text-indigo-600">.</span></a>
+                <a href="/" class="text-2xl font-black text-gray-900 tracking-tighter">JERZOSHOP<span class="text-violet-500">!</span></a>
                 
                 <div class="hidden md:flex items-center gap-6">
-                    <a href="/" class="text-sm font-bold {{ !request('category') ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-900' }}">Wszystko</a>
+                    <a href="/" class="text-sm font-bold {{ !request('category') ? 'text-violet-500' : 'text-gray-500 hover:text-gray-900' }}">Wszystko</a>
                     @foreach($categories as $category)
                         <a href="/?category={{ $category->slug }}&sort={{ request('sort') }}" 
-                           class="text-sm font-bold {{ request('category') == $category->slug ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-900' }}">
+                           class="text-sm font-bold {{ request('category') == $category->slug ? 'text-violet-500' : 'text-gray-500 hover:text-gray-900' }}">
                             {{ $category->name }}
                         </a>
                     @endforeach
