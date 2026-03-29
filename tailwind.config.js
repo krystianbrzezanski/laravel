@@ -11,6 +11,13 @@ export default {
 
     theme: {
         extend: {
+            colors: {
+                // Twoja nowa paleta
+                'dark-bg': '#0f0f0f', // Prawie czarny
+                'dark-card': '#1a1a1a', // Ciemny szary dla kart produktów
+                'brand-purple': '#8b5cf6', // Żywy fiolet (violet-500)
+                'brand-dark-purple': '#6d28d9', // Ciemniejszy fiolet do hoverów
+            },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
