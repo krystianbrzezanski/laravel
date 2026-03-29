@@ -5,10 +5,10 @@
     <title>Finalizacja Zamówienia - JEŻOSHOP</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-black text-white"> {{-- Tło zmienione na czarne --}}
-    <div class="max-w-4xl mx-auto p-12">
-        <h1 class="text-4xl font-black mb-8 text-white italic tracking-tighter">
-            Podsumowanie <span class="text-violet-500">i dostawa</span> {{-- Indigo zastąpione fioletem --}}
+<body class="bg-black text-white p-6 md:p-12"> {{-- Tło czarne --}}
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-black mb-12 text-white italic tracking-tighter">
+            Podsumowanie <span class="text-violet-500">i dostawa</span>
         </h1>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -39,12 +39,29 @@
                 </form>
             </div>
 
-            {{-- Prawa kolumna - Produkty --}}
+            {{-- Prawa kolumna - Produkty (TU BYŁ BŁĄD) --}}
             <div class="space-y-4">
                 <h3 class="text-xl font-black text-zinc-100 italic tracking-tighter mb-6">Twoje Produkty</h3>
-                @foreach($cart as $item)
-                <div class="flex items-center justify-between bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800 hover:border-zinc-700 transition-colors">
-                    <div>
-                        <p class="font-bold text-zinc-100">{{ $item['name'] }}</p>
-                        <p class="text-xs text-zinc-500 font-medium uppercase tracking-wider">{{ $item['quantity'] }} szt. x {{ number_format($item['price'], 2) }} PLN</p>
-                    </div>
+                
+                @if(isset($cart) && count($cart) > 0)
+                    @foreach($cart as $item)
+                        <div class="flex items-center justify-between bg-zinc-900/50 p-5 rounded-2xl border border-zinc-800 hover:border-zinc-700 transition-colors">
+                            <div>
+                                <p class="font-bold text-zinc-100">{{ $item['name'] ?? 'Produkt' }}</p>
+                                <p class="text-xs text-zinc-500 font-medium uppercase tracking-wider">
+                                    {{ $item['quantity'] ?? 1 }} szt. x {{ number_format($item['price'] ?? 0, 2) }} PLN
+                                </p>
+                            </div>
+                            <p class="font-black text-violet-400 text-lg italic tracking-tighter">
+                                {{ number_format(($item['price'] ?? 0) * ($item['quantity'] ?? 1), 2) }} PLN
+                            </p>
+                        </div>
+                    @endforeach {{-- TO NAPRAWIA BŁĄD --}}
+                @else
+                    <p class="text-zinc-500">Brak produktów.</p>
+                @endif
+            </div>
+        </div>
+    </div>
+</body>
+</html>
