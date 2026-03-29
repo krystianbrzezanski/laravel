@@ -6,7 +6,7 @@
     <title>JERZOSHOP</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50">
+<body class="bg-black text-violet-500">
 
     {{-- SEKCJA POWIADOMIEŃ (SUCCESS MESSAGE) --}}
     @if(session('success'))
@@ -30,7 +30,7 @@
     <nav class="bg-white border-b border-gray-100 sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-12">
-                <a href="/" class="text-2xl font-black text-gray-900 tracking-tighter">JERZOSHOP<span class="text-violet-500">!</span></a>
+                <a href="/" class="text-2xl font-white text-gray-900 tracking-tighter">JERZOSHOP<span class="text-violet-500">!</span></a>
                 
                 <div class="hidden md:flex items-center gap-6">
                     <a href="/" class="text-sm font-bold {{ !request('category') ? 'text-violet-500' : 'text-gray-500 hover:text-gray-900' }}">Wszystko</a>
