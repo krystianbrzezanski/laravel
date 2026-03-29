@@ -49,13 +49,13 @@ return [
 
         's3' => [
     'driver' => 's3',
-    'key' => env('AWS_ACCESS_KEY_ID'),
-    'secret' => env('AWS_SECRET_ACCESS_KEY'),
-    'region' => 'us-east-1', // Zmień z env('AWS_DEFAULT_REGION') na 'us-east-1'
+    'key' => '4e8a754bf3844123f1f09c97cb591349',
+    'secret' => '5af34200f7d48d52a7aabb2bedb17beb083c404c79de07b1c835b2a396cf15fe',
+    'region' => 'us-east-1',
     'bucket' => 'fls-a16b2084-099a-4d6d-8fba-bea87b6298fb',
     'url' => env('AWS_URL'),
-    'endpoint' => env('AWS_ENDPOINT'),
-    'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+    'endpoint' => 'https://367be3a2035528943240074d0096e0cd.r2.cloudflarestorage.com',
+    'use_path_style_endpoint' => false,
     'throw' => false,
 ],
 
