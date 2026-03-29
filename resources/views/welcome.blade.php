@@ -8,7 +8,7 @@
 </head>
 <body class="bg-black text-white">
 
-    {{-- SEKCJA POWIADOMIEŃ --}}
+    {{-- SEKCJA POWIADOMIEŃńńńńńń --}}
     @if(session('success'))
         <div class="fixed top-24 left-1/2 -translate-x-1/2 z-[100] w-full max-w-xl px-6">
             <div class="bg-violet-600 text-white px-6 py-4 rounded-3xl shadow-2xl flex items-center justify-between animate-bounce">
