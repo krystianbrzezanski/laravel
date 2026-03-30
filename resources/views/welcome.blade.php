@@ -31,7 +31,7 @@
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-12">
                 <a href="/" class="text-2xl font-black tracking-tighter">
-                    <span class="text-violet-500">🦔 JEŻO</span><span class="text-white">SHOP</span><span class="text-violet-500">.</span>
+                    <span class="text-violet-500"> cwelo</span><span class="text-white">SHOP</span><span class="text-violet-500">.</span>
                 </a>
                 
                 <div class="hidden md:flex items-center gap-6">
